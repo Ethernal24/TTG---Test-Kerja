@@ -1,1 +1,11 @@
 1. langsung tinggal tekan index.html maka akan ke load semua.
+2. pada halam tersebut ada 2 tampilan yaitu tampilan login dan tampilan register.
+3. pada tampilan register akan muncul form yang meliputi :
+nama, email, password, dan confirm password
+4. validasi berlaku kepada email, password dan confirm password.
+rules validasi : 
+email : harus memiliki "@" dan ".com", misal gilbert@gmail.com. jika tidak ada "@" dan ".com maka tidak dianggap valid
+password : password harus minimal 8 karakter bebas mau angka ataupun huruf.
+confirm password : confirm password harus sama dengan password.
+5. jika form sudah tervalidasi semua makan setelah menekan tombol register akan muncul tulisan berhasil daftar.
+6. untuk yang login, hanyalah pemanis saja.

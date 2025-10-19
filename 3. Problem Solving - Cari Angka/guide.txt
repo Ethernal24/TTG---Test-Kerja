@@ -1,0 +1,9 @@
+1. tekan index.html nanti akan muncul form untuk user memasukkan angka
+2. angka hanya bisa dimasukan satu per satu saja, jadi tidak bisa pakai koma-koma
+3. setelah form udah diisi tekan tombol Submit
+4. untuk mencari angka yang hilang maka langsung tekan tombol cariAngka
+5. maka sistem akan secara otomatis mencarikan angka yang tidak ada dalam array misalkan : 
+input
+[301, 303, 310, 307]
+hasil : 
+[302, 304, 305, 306, 308, 309]

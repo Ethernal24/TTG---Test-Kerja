@@ -1,0 +1,1 @@
+1. langsung tinggal tekan index.html maka akan ke load semua.

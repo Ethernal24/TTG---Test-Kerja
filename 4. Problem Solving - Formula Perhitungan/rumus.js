@@ -1,60 +1,91 @@
 const readline = require("readline");
 
-function permute(arr) {
-    if (arr.length <= 1) return [arr];
-    const result = [];
+// Fungsi untuk menghasilkan semua urutan angka (permutasi)
+function buatSemuaUrutan(arr) {
+    if (arr.length === 1) return [arr];
+    const hasil = [];
+
     for (let i = 0; i < arr.length; i++) {
-        const rest = arr.slice(0, i).concat(arr.slice(i + 1));
-        for (const p of permute(rest)) result.push([arr[i], ...p]);
+        const angkaSekarang = arr[i];
+        const sisa = arr.slice(0, i).concat(arr.slice(i + 1));
+        const kombinasiLain = buatSemuaUrutan(sisa);
+        kombinasiLain.forEach(k => hasil.push([angkaSekarang, ...k]));
     }
-    return result;
+
+    return hasil;
 }
 
-function findFormula(numbers, target) {
-    const ops = ['+', '-', '*'];
-    let found = null;
+// Fungsi utama untuk mencari rumus
+function cariRumusYangCocok(daftarAngka, target) {
+    const operatorTersedia = ['+', '-', '*'];
+    let hasilDitemukan = null;
 
-    function helper(expr, remaining) {
-        if (found) return;
-        if (remaining.length === 0) {
+    // Fungsi rekursif untuk coba semua kombinasi operator
+    function eksplorasi(expr, sisa) {
+        if (hasilDitemukan) return;
+
+        if (sisa.length === 0) {
             try {
-                const val = Function(`return ${expr}`)();
-                if (val === target) found = expr;
-            } catch { }
+                const nilai = Function(`return ${expr}`)();
+                if (nilai === target) {
+                    hasilDitemukan = expr;
+                }
+            } catch (e) {
+
+            }
             return;
         }
 
-        for (const op of ops) {
-            helper(`${expr}${op}${remaining[0]}`, remaining.slice(1));
-            helper(`(${expr}${op}${remaining[0]})`, remaining.slice(1));
-            if (found) return;
+        // coba semua operator antar angka
+        for (const op of operatorTersedia) {
+            eksplorasi(`${expr}${op}${sisa[0]}`, sisa.slice(1));
+            eksplorasi(`(${expr}${op}${sisa[0]})`, sisa.slice(1));
+            if (hasilDitemukan) return;
         }
     }
 
-    for (const perm of permute(numbers)) {
-        helper(perm[0].toString(), perm.slice(1));
-        if (found) break;
+
+    const semuaUrutan = buatSemuaUrutan(daftarAngka);
+    for (let i = 0; i < semuaUrutan.length; i++) {
+        const urutan = semuaUrutan[i];
+        eksplorasi(urutan[0].toString(), urutan.slice(1));
+        if (hasilDitemukan) break;
     }
 
-    return found ? found : "Tidak ditemukan kombinasi yang cocok";
+    return hasilDitemukan
+        ? hasilDitemukan
+        : "Tidak ditemukan kombinasi operator dan urutan angka yang menghasilkan target tersebut.";
 }
 
-// --- Input user CLI ---
+// input dari terminal
 const rl = readline.createInterface({
     input: process.stdin,
     output: process.stdout
 });
 
+console.log("=== Program Pencari Rumus ===");
+console.log("Masukkan daftar angka dan target untuk menemukan kombinasi operator yang cocok.\n");
+
 rl.question("Masukkan daftar angka (pisahkan dengan koma, contoh: 1,4,5,6): ", (inputAngka) => {
     rl.question("Masukkan target angka: ", (targetInput) => {
-        const angkaArray = inputAngka.split(",").map(a => parseInt(a.trim()));
+        const daftarAngka = inputAngka
+            .split(",")
+            .map(a => parseInt(a.trim()))
+            .filter(a => !isNaN(a));
+
         const target = parseInt(targetInput);
 
-        const hasil = findFormula(angkaArray, target);
+        if (daftarAngka.length === 0 || isNaN(target)) {
+            console.log("\nInput tidak valid. Pastikan angka dan target diisi dengan benar.");
+            rl.close();
+            return;
+        }
 
-        console.log(`\nRumus untuk mencapai ${target}:`);
-        console.log(hasil);
-
-        rl.close();
+        console.log("\nSedang menghitung kemungkinan...");
+        setTimeout(() => {
+            const hasil = cariRumusYangCocok(daftarAngka, target);
+            console.log(`\nHasil: ${hasil}`);
+            rl.close();
+        }, 500);
     });
 });

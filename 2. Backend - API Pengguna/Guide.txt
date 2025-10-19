@@ -1,0 +1,6 @@
+Panduan
+1. pada file ini terdapat 2 tipe routes yaitu API Route dan view Route
+2. API routenya terletak di folder /routes/api
+3. API routenya bisa langsung di test menggunakan postman
+4. untuk View Routenya bisa langsung di akses menggunakan localhost dengan port 3000
+5. kemudian langsung ke menu contact
